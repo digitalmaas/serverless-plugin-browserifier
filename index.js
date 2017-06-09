@@ -43,43 +43,42 @@ class SlsBrowserify {
 
     this.hooks = {
       // Handle `sls deploy`
-      'before:package:createDeploymentArtifacts': () => Bb
-        .bind(this)
-        .then(this.validate)
-        .then(this.globalConfig)
-        .then(() => {
-          const functionNames = this.serverless.service.getAllFunctions()
-          return Bb.all(functionNames.map(functionName => {
-            return this.bundle(functionName)
-          }))
-        })
-        .catch(handleSkip),
+      'package:createDeploymentArtifacts': this.createAllArtifacts.bind(this),
 
       // Handle `sls deploy function`
-      'before:package:function:package': () => Bb
-        .bind(this)
-        .then(this.validate)
-        .then(this.globalConfig)
-        .then(() => this.bundle(this.options.function))
-        .catch(handleSkip),
+      'package:function:package': this.createArtifact.bind(this),
 
       // Handle `sls browserify`
-      'browserify:validate': () => Bb
-        .bind(this)
-        .then(this.validate)
-        .then(this.globalConfig)
-        .then(() => this.bundle(this.options.function))
-        .catch(handleSkip)
+      'browserify:validate': this.createArtifact.bind(this)
     }
   }
-}
 
-function handleSkip (err) {
-  if (err.statusCode !== 'skip') { // User explicitly chose to skip this function's browserification
-    throw err
-  } else {
-    this.serverless.cli.log(`WARNING: ${err.message} skipping browserifier`)
+  createAllArtifacts () {
+    return Bb
+      .bind(this)
+      .then(this.validate)
+      .then(this.globalConfig)
+      .then(() => Bb.all(this.serverless.service.getAllFunctions().map(name => this.bundle(name))))
+      .catch(this.handleSkip)
   }
+
+  createArtifact() {
+    return Bb
+      .bind(this)
+      .then(this.validate)
+      .then(this.globalConfig)
+      .then(() => this.bundle(this.options.function))
+      .catch(this.handleSkip)
+  }
+
+  handleSkip (err) {
+    if (err.statusCode !== 'skip') { // User explicitly chose to skip this function's browserification
+      throw err
+    } else {
+      this.serverless.cli.log(`Browserifier: ${err.message}, skipping browserify`)
+    }
+  }
+
 }
 
 module.exports = SlsBrowserify
