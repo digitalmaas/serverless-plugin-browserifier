@@ -1,0 +1,54 @@
+{
+  "name": "serverless-plugin-browserifier",
+  "version": "1.0.0",
+  "description": "Serverless v1.0 plugin that uses browserify to bundle Node.js lambda functions",
+  "main": "index.js",
+  "author": "Ryan Pendergast <ryan.pendergast@gmail.com> (http://rynop.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/digitalmaas/serverless-plugin-browserifier#readme",
+  "bugs": {
+    "url": "https://github.com/digitalmaas/serverless-plugin-browserifier/issues"
+  },
+  "contributors": [
+    "Ryan Pendergast <ryan.pendergast@gmail.com> (http://rynop.com)",
+    "Ricardo Nolde <ricardo@nolde.com.br>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitalmaas/serverless-plugin-browserifier.git"
+  },
+  "engines": {
+    "node": ">=4.3"
+  },
+  "scripts": {
+    "format": "./node_modules/.bin/standard --fix",
+    "lint": "./node_modules/.bin/standard",
+    "pretest": "npm run lint",
+    "test": "echo \"no tests yet =( \""
+  },
+  "keywords": [
+    "digitalmaas",
+    "serverless",
+    "serverless-plugin",
+    "plugin",
+    "browserify",
+    "bundle",
+    "lambda",
+    "aws",
+    "aws-lambda",
+    "node.js",
+    "node"
+  ],
+  "dependencies": {
+    "archiver": "1.x",
+    "bluebird": "3.x",
+    "browserify": "14.4.0",
+    "fs-extra": "3.x",
+    "glob-all": "3.x",
+    "lodash.union": "4.x",
+    "xtend": "4.x"
+  },
+  "devDependencies": {
+    "standard": "x"
+  }
+}

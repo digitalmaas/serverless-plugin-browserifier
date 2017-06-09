@@ -1,0 +1,11 @@
+{
+    /* formatting is done using standard */
+    /* this disables jsbeautifier formatters to js, but allow good json formatting */
+    "js": {
+        "allowed_file_extensions": ["json"],
+        "indent_size": 2,
+        "indent_char": " ",
+        "indent_level": 0,
+        "indent_with_tabs": false
+    }
+}
