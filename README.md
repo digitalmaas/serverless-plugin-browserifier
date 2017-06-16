@@ -42,14 +42,14 @@ Mind that [aws-sdk-js](https://github.com/aws/aws-sdk-js) now officially [suppor
 
 From your target serverless project, run:
 ```
-npm install serverless-plugin-browserify --save-dev
+npm install serverless-plugin-browserifier --save-dev
 ```
 
 Add the plugin to your `serverless.yml` file and set `package.individually` to `true`:
 
 ```yaml
 plugins:
-  - serverless-plugin-browserify
+  - serverless-plugin-browserifier
 package:
   individually: true
 ```

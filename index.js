@@ -104,7 +104,7 @@ class SlsBrowserify {
     this.serverless.cli.log(`Browserifier: ${err.message}, skipping browserify`)
   }
 
-  warnFailure (err) {
+  warnFailure () {
     this.serverless.cli.log(`Browserifier: unexpected failure detected`)
   }
 }
