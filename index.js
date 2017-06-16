@@ -15,6 +15,7 @@ class SlsBrowserify {
     this.options = options
     this.globalBrowserifyConfig = {}
     this.servicePath = path.join(this.serverless.config.servicePath || os.tmpdir(), '.serverless')
+    this.functionConfigCache = {}
 
     Object.assign(
       this,
@@ -23,39 +24,14 @@ class SlsBrowserify {
       bundle
     )
 
-    this.commands = {
-      browserify: {
-        usage: 'Bundle Node.js lambda with Browserify',
-        lifecycleEvents: [
-          'validate',
-          'bundle'
-        ],
-        options: {
-          out: {
-            usage: 'Path to output directory',
-            shortcut: 'o'
-          },
-          function: {
-            usage: 'Name of the function',
-            shortcut: 'f',
-            required: true
-          }
-        },
-        commands: {}
-      }
-    }
-
     this.hooks = {
       // Handle `sls deploy`
       'before:package:createDeploymentArtifacts': this.prepareAllFunctions.bind(this),
-      'after:package:createDeploymentArtifacts': this.clearAllFunctions.bind(this),
+      'after:package:createDeploymentArtifacts': this.bundleAllFunctions.bind(this),
 
       // Handle `sls deploy function`
       'before:package:function:package': this.prepareFunction.bind(this),
-      'after:package:function:package': this.clearFunction.bind(this),
-
-      // Handle `sls browserify`
-      'browserify:validate': this.prepareFunction.bind(this)
+      'after:package:function:package': this.bundleFunction.bind(this)
     }
   }
 
@@ -64,7 +40,7 @@ class SlsBrowserify {
       .bind(this)
       .then(this.validate)
       .then(this.computeGlobalConfig)
-      .then(() => Bb.all(this.getAllFunctions().map(name => this.bundle(name).reflect())))
+      .then(() => Bb.all(this.getAllFunctions().map(name => this.bootstrap(name).reflect())))
       .then(results => results
         .filter(inspection => inspection.isRejected())
         .forEach(inspection => this.handleSkip(inspection.reason())))
@@ -76,21 +52,23 @@ class SlsBrowserify {
       .bind(this)
       .then(this.validate)
       .then(this.computeGlobalConfig)
-      .then(() => this.bundle(this.options.function))
+      .then(() => this.bootstrap(this.options.function))
       .catch(this.handleSkip)
       .tapCatch(this.warnFailure)
   }
 
-  clearAllFunctions () {
+  bundleAllFunctions () {
     return Bb
       .bind(this)
-      .then(() => this.getAllFunctions().forEach(name => this.clean(name)))
+      .then(() => this.getAllFunctions().forEach(name => this.bundle(name)))
+      .tapCatch(this.warnFailure)
   }
 
-  clearFunction () {
+  bundleFunction () {
     return Bb
       .bind(this)
       .then(() => this.bundle(this.options.function))
+      .tapCatch(this.warnFailure)
   }
 
   getAllFunctions () {

@@ -91,10 +91,6 @@ $ export SLS_DEBUG=true
 $ sls deploy function -v -f usersGet
 ```
 
-### Bundle only
-
-Run `sls browserify -f <functionName>`.  You can optionally dictate where the bundling output folder is by using the `-o` flag. Ex: `sls browserify -o /tmp/test -f pageUpdate`.
-
 ## FAQ
 
 - **Should I use Webpack instead of this plugin?** I prefer Browserify over [webpack](https://webpack.github.io/) because I have found it supports more modules, optimizes better, and requires less configuration.
