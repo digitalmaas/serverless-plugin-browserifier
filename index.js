@@ -1,16 +1,20 @@
 'use strict'
 
 const Bb = require('bluebird')
+const path = require('path')
+const os = require('os')
 
 const validate = require('./lib/validate')
 const configure = require('./lib/configure')
 const bundle = require('./lib/bundle')
 
 class SlsBrowserify {
+  //
   constructor (serverless, options) {
     this.serverless = serverless
     this.options = options
     this.globalBrowserifyConfig = {}
+    this.servicePath = path.join(this.serverless.config.servicePath || os.tmpdir(), '.serverless')
 
     Object.assign(
       this,
@@ -43,42 +47,66 @@ class SlsBrowserify {
 
     this.hooks = {
       // Handle `sls deploy`
-      'package:createDeploymentArtifacts': this.createAllArtifacts.bind(this),
+      'before:package:createDeploymentArtifacts': this.prepareAllFunctions.bind(this),
+      'after:package:createDeploymentArtifacts': this.clearAllFunctions.bind(this),
 
       // Handle `sls deploy function`
-      'package:function:package': this.createArtifact.bind(this),
+      'before:package:function:package': this.prepareFunction.bind(this),
+      'after:package:function:package': this.clearFunction.bind(this),
 
       // Handle `sls browserify`
-      'browserify:validate': this.createArtifact.bind(this)
+      'browserify:validate': this.prepareFunction.bind(this)
     }
   }
 
-  createAllArtifacts () {
+  prepareAllFunctions () {
     return Bb
       .bind(this)
       .then(this.validate)
-      .then(this.globalConfig)
-      .then(() => Bb.all(this.serverless.service.getAllFunctions().map(name => this.bundle(name))))
-      .catch(this.handleSkip)
+      .then(this.computeGlobalConfig)
+      .then(() => Bb.all(this.getAllFunctions().map(name => this.bundle(name).reflect())))
+      .then(results => results
+        .filter(inspection => inspection.isRejected())
+        .forEach(inspection => this.handleSkip(inspection.reason())))
+      .tapCatch(this.warnFailure)
   }
 
-  createArtifact() {
+  prepareFunction () {
     return Bb
       .bind(this)
       .then(this.validate)
-      .then(this.globalConfig)
+      .then(this.computeGlobalConfig)
       .then(() => this.bundle(this.options.function))
       .catch(this.handleSkip)
+      .tapCatch(this.warnFailure)
+  }
+
+  clearAllFunctions () {
+    return Bb
+      .bind(this)
+      .then(() => this.getAllFunctions().forEach(name => this.clean(name)))
+  }
+
+  clearFunction () {
+    return Bb
+      .bind(this)
+      .then(() => this.bundle(this.options.function))
+  }
+
+  getAllFunctions () {
+    return this.serverless.service.getAllFunctions()
   }
 
   handleSkip (err) {
-    if (err.statusCode !== 'skip') { // User explicitly chose to skip this function's browserification
+    if (err.statusCode !== 'skip') {
       throw err
-    } else {
-      this.serverless.cli.log(`Browserifier: ${err.message}, skipping browserify`)
     }
+    this.serverless.cli.log(`Browserifier: ${err.message}, skipping browserify`)
   }
 
+  warnFailure (err) {
+    this.serverless.cli.log(`Browserifier: unexpected failure detected`)
+  }
 }
 
 module.exports = SlsBrowserify

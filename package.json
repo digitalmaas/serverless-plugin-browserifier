@@ -40,11 +40,10 @@
     "node"
   ],
   "dependencies": {
-    "archiver": "1.x",
     "bluebird": "3.x",
-    "browserify": "14.4.0",
+    "browserify": "14.x",
     "fs-extra": "3.x",
-    "glob-all": "3.x",
+    "globby": "6.x",
     "lodash.union": "4.x",
     "xtend": "4.x"
   },

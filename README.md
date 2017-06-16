@@ -3,6 +3,8 @@ Serverless Browserifier Plugin
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![standard](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
+[![NPM version](https://img.shields.io/npm/v/serverless-plugin-browserifier.svg)](https://www.npmjs.com/package/serverless-plugin-browserifier)
+[![NPM downloads](https://img.shields.io/npm/dm/serverless-plugin-browserifier.svg)](https://www.npmjs.com/package/serverless-plugin-browserifier)
 
 A [Serverless](https://serverless.com) v1.0 plugin that uses [Browserify](https://github.com/substack/node-browserify) to bundle your Node.js Lambda functions.
 
