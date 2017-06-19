@@ -2,9 +2,9 @@ Serverless Browserifier Plugin
 ==============================
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
-[![standard](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
 [![NPM version](https://img.shields.io/npm/v/serverless-plugin-browserifier.svg)](https://www.npmjs.com/package/serverless-plugin-browserifier)
 [![NPM downloads](https://img.shields.io/npm/dm/serverless-plugin-browserifier.svg)](https://www.npmjs.com/package/serverless-plugin-browserifier)
+[![standard](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
 
 A [Serverless](https://serverless.com) v1.0 plugin that uses [Browserify](https://github.com/substack/node-browserify) to bundle your Node.js Lambda functions.
 
@@ -83,11 +83,11 @@ If you find a package that is not supported or does not behave well with browser
 
 ## Usage
 
-When this plugin is enabled, and `package.individually` is `true`, running `serverless deploy` and `serverless deploy -f <funcName>` will automatically browserify your node lambda code.
+When this plugin is enabled, and `package.individually` is `true`, running `serverless deploy` and `serverless deploy -f <funcName>` will automatically browserify your Node.js lambda code.
 
-If you want to see output of bundled file or zip simply set `SLS_DEBUG`.  Example: 
+If you want to see more information about the process, simply set `SLS_DEBUG=*`. Example: 
 ```
-$ export SLS_DEBUG=true
+$ export SLS_DEBUG=*
 $ sls deploy function -v -f usersGet
 ```
 
@@ -98,4 +98,4 @@ $ sls deploy function -v -f usersGet
 
 ## License
 
-Please refer to [LICENSE](./LICENSE) file.
+MIT License. For the complete information, please refer to the [license](./LICENSE) file.

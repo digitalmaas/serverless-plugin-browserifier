@@ -1,6 +1,10 @@
 MIT License
 
-Copyright (c) 2017 Ryan Pendergast
+Copyright (c) for portions of this project are held by Ryan Pendergast (2016),
+as part of project `serverless-plugin-browserify`.
+
+All other Copyright (c) for `serverless-plugin-browserifier` are held by 
+DigitalMaas, (2017).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
