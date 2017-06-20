@@ -42,7 +42,6 @@
   "dependencies": {
     "archiver": "1.x",
     "bluebird": "3.x",
-    "browserify": "13.x",
     "fs-extra": "3.x",
     "globby": "6.x",
     "lodash.union": "4.x",
@@ -50,5 +49,8 @@
   },
   "devDependencies": {
     "standard": "x"
+  },
+  "peerDependencies": {
+    "browserify": ">= 13.x"
   }
 }
