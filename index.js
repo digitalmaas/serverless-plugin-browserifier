@@ -60,7 +60,7 @@ class SlsBrowserify {
   bundleAllFunctions () {
     return Bb
       .bind(this)
-      .then(() => this.getAllFunctions().forEach(name => this.bundle(name)))
+      .then(() => Bb.all(this.getAllFunctions().map(name => this.bundle(name))))
       .tapCatch(this.warnFailure)
   }
 
