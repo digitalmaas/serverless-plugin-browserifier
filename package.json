@@ -1,9 +1,9 @@
 {
   "name": "serverless-plugin-browserifier",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Serverless v1.0 plugin that uses browserify to bundle Node.js lambda functions",
   "main": "index.js",
-  "author": "Ryan Pendergast <ryan.pendergast@gmail.com> (http://rynop.com)",
+  "author": "Ricardo Nolde <ricardo@nolde.com.br>",
   "license": "MIT",
   "homepage": "https://github.com/digitalmaas/serverless-plugin-browserifier#readme",
   "bugs": {
@@ -43,6 +43,7 @@
     "archiver": "1.x",
     "bluebird": "3.x",
     "browserify": "13.x",
+    "filesize": "3.x",
     "fs-extra": "3.x",
     "globby": "6.x",
     "lodash.union": "4.x",
