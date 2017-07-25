@@ -8,7 +8,7 @@ const validate = require('./lib/validate')
 const configure = require('./lib/configure')
 const bundle = require('./lib/bundle')
 
-class SlsBrowserify {
+class BrowserifierPlugin {
   //
   constructor (serverless, options) {
     this.serverless = serverless
@@ -87,4 +87,4 @@ class SlsBrowserify {
   }
 }
 
-module.exports = SlsBrowserify
+module.exports = BrowserifierPlugin
