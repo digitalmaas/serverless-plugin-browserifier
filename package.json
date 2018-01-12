@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-browserifier",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Serverless v1 plugin that uses browserify to bundle Node.js lambda functions",
   "main": "index.js",
   "author": "Ricardo Nolde <ricardo@nolde.com.br>",
@@ -41,13 +41,15 @@
     "node"
   ],
   "dependencies": {
-    "archiver": "1.x",
+    "archiver": "2.1.1",
     "bluebird": "3.x",
-    "browserify": "13.x",
-    "filesize": "3.x",
-    "fs-extra": "3.x",
-    "globby": "6.x",
-    "lodash.union": "4.x"
+    "filesize": "3.5.11",
+    "fs-extra": "5.0.0",
+    "globby": "7.1.1",
+    "lodash.union": "4.6.0"
+  },
+  "peerDependencies": {
+    "browserify": ">= 13.3.x"
   },
   "devDependencies": {
     "standard": "x"
