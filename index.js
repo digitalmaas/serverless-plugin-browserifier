@@ -1,6 +1,6 @@
 'use strict'
 
-const Bb = require('bluebird')
+const Promise = require('bluebird')
 const path = require('path')
 const os = require('os')
 
@@ -9,21 +9,18 @@ const configure = require('./lib/configure')
 const bundle = require('./lib/bundle')
 
 class BrowserifierPlugin {
-  //
   constructor (serverless, options) {
     this.serverless = serverless
     this.options = options
     this.globalBrowserifyConfig = {}
     this.servicePath = path.join(this.serverless.config.servicePath || os.tmpdir(), '.serverless')
     this.functionConfigCache = {}
-
     Object.assign(
       this,
       validate,
       configure,
       bundle
     )
-
     this.hooks = {
       // Handle `sls deploy`
       'before:package:createDeploymentArtifacts': this.prepareAllFunctions.bind(this),
@@ -36,11 +33,15 @@ class BrowserifierPlugin {
   }
 
   prepareAllFunctions () {
-    return Bb
+    return Promise
       .bind(this)
       .then(this.validate)
       .then(this.computeGlobalConfig)
-      .then(() => Bb.all(this.getAllFunctions().map(name => this.bootstrap(name).reflect())))
+      .then(() => {
+        const fns = this.getAllFunctions().map(name => this.bootstrap(name).reflect())
+        this.serverless.cli.log(`Browserifier: Preparing ${fns.length} functions...`)
+        return Promise.all(fns)
+      })
       .then(results => results
         .filter(inspection => inspection.isRejected())
         .forEach(inspection => this.handleSkip(inspection.reason())))
@@ -48,7 +49,7 @@ class BrowserifierPlugin {
   }
 
   prepareFunction () {
-    return Bb
+    return Promise
       .bind(this)
       .then(this.validate)
       .then(this.computeGlobalConfig)
@@ -58,14 +59,14 @@ class BrowserifierPlugin {
   }
 
   bundleAllFunctions () {
-    return Bb
+    return Promise
       .bind(this)
-      .then(() => Bb.all(this.getAllFunctions().map(name => this.bundle(name))))
+      .then(() => Promise.all(this.getAllFunctions().map(name => this.bundle(name))))
       .tapCatch(this.warnFailure)
   }
 
   bundleFunction () {
-    return Bb
+    return Promise
       .bind(this)
       .then(() => this.bundle(this.options.function))
       .tapCatch(this.warnFailure)
