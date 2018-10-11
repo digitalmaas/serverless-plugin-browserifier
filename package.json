@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-browserifier",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Serverless v1 plugin that uses browserify to bundle Node.js lambda functions",
   "main": "index.js",
   "author": "Ricardo Nolde <ricardo@nolde.com.br>",
@@ -20,10 +20,27 @@
   "engines": {
     "node": ">=4.3"
   },
+  "prettier": {
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "jsxBracketSameLine": true
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
   "scripts": {
-    "format": "./node_modules/.bin/standard --fix",
-    "lint": "./node_modules/.bin/standard",
-    "pretest": "npm run lint",
+    "format": "./node_modules/.bin/eslint --fix --ext .js .",
+    "lint": "./node_modules/.bin/eslint --ext .js .",
     "test": "echo \"no tests yet =( \""
   },
   "keywords": [
@@ -32,6 +49,7 @@
     "serverless-plugin",
     "plugin",
     "browserify",
+    "browserify-transform",
     "browserify-tool",
     "bundle",
     "lambda",
@@ -41,17 +59,23 @@
     "node"
   ],
   "dependencies": {
-    "archiver": "2.1.1",
-    "bluebird": "3.x",
-    "filesize": "3.5.11",
-    "fs-extra": "5.0.0",
-    "globby": "7.1.1",
-    "lodash.union": "4.6.0"
+    "archiver": "2.x",
+    "bluebird": "3.5.x",
+    "filesize": "3.x",
+    "fs-extra": "5.x",
+    "globby": "7.x",
+    "lodash.union": "4.x"
   },
   "peerDependencies": {
-    "browserify": ">= 13.3.x"
+    "browserify": ">= 13.3.0"
   },
   "devDependencies": {
-    "standard": "x"
+    "eslint": "4.19.1",
+    "eslint-config-prettier": "3.0.1",
+    "eslint-plugin-prettier": "2.6.2",
+    "husky": "1.0.0-rc.13",
+    "lint-staged": "7.2.2",
+    "prettier": "1.14.2",
+    "standard": "11.0.1"
   }
 }
