@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  run_tests:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm test
+
+  release:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run release
+
+workflows:
+  version: 2
+  test_and_release:
+    jobs:
+      - run_tests
+      - release:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only: master
