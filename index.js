@@ -1,91 +1,100 @@
 'use strict'
 
 const Promise = require('bluebird')
+const get = require('lodash/get')
 const path = require('path')
 const os = require('os')
 
-const validate = require('./lib/validate')
-const configure = require('./lib/configure')
 const bundle = require('./lib/bundle')
+const configure = require('./lib/configure')
+const errors = require('./lib/errors')
+const validate = require('./lib/validate')
 
 class BrowserifierPlugin {
   constructor (serverless, options) {
-    this.serverless = serverless
-    this.options = options
-    this.globalBrowserifyConfig = {}
-    this.servicePath = path.join(this.serverless.config.servicePath || os.tmpdir(), '.serverless')
-    this.functionConfigCache = {}
-    Object.assign(
-      this,
-      validate,
-      configure,
-      bundle
-    )
+    this.S = serverless
+    this._b = {
+      options,
+      isDisabled: get(this.S, 'service.custom.browserify.disable', false),
+      servicePath: path.join(this.S.config.servicePath || os.tmpdir(), '.serverless'),
+      runtimeIsNode: get(this.S, 'service.provider.runtime', '').indexOf('nodejs') !== -1,
+      packageIndividually: get(this.S, 'service.package.individually', false),
+      globalBrowserifyConfig: {},
+      functionConfigCache: {}
+    }
     this.hooks = {
-      // Handle `sls deploy`
-      'before:package:createDeploymentArtifacts': this.prepareAllFunctions.bind(this),
-      'after:package:createDeploymentArtifacts': this.bundleAllFunctions.bind(this),
-
-      // Handle `sls deploy function`
-      'before:package:function:package': this.prepareFunction.bind(this),
-      'after:package:function:package': this.bundleFunction.bind(this)
+      // handle `sls deploy`
+      'before:package:createDeploymentArtifacts': this._prepareAllFunctions.bind(this),
+      'after:package:createDeploymentArtifacts': this._bundleAllFunctions.bind(this),
+      // handle `sls deploy function`
+      'before:package:function:package': this._prepareFunction.bind(this),
+      'after:package:function:package': this._bundleFunction.bind(this)
     }
   }
 
-  prepareAllFunctions () {
+  _prepareAllFunctions () {
     return Promise
       .bind(this)
-      .then(this.validate)
-      .then(this.computeGlobalConfig)
+      .then(this._validate)
+      .then(this._computeGlobalConfig)
       .then(() => {
-        const fns = this.getAllFunctions().map(name => this.bootstrap(name).reflect())
-        this.serverless.cli.log(`Browserifier: Preparing ${fns.length} functions...`)
-        return Promise.all(fns)
+        const fns = this._getAllFunctions()
+        this.S.cli.log(`Browserifier: Preparing ${fns.length} function(s)...`)
+        return Promise.all(fns.map(name => this._bootstrap(name).reflect()))
       })
       .then(results => results
         .filter(inspection => inspection.isRejected())
-        .forEach(inspection => this.handleSkip(inspection.reason())))
-      .tapCatch(this.warnFailure)
+        .forEach(inspection => this._handleSkip(inspection.reason())))
+      .catch(this._handleSkip)
+      .tapCatch(this._warnFailure)
   }
 
-  prepareFunction () {
+  _prepareFunction () {
     return Promise
       .bind(this)
-      .then(this.validate)
-      .then(this.computeGlobalConfig)
-      .then(() => this.bootstrap(this.options.function))
-      .catch(this.handleSkip)
-      .tapCatch(this.warnFailure)
+      .then(this._validate)
+      .then(this._computeGlobalConfig)
+      .then(() => this._bootstrap(this._b.options.function))
+      .catch(this._handleSkip)
+      .tapCatch(this._warnFailure)
   }
 
-  bundleAllFunctions () {
+  _bundleAllFunctions () {
     return Promise
       .bind(this)
-      .then(() => Promise.all(this.getAllFunctions().map(name => this.bundle(name))))
-      .tapCatch(this.warnFailure)
+      .then(this._validate)
+      .then(() => Promise.all(this._getAllFunctions().map(name => this._bundle(name))))
+      .tapCatch(this._warnFailure)
   }
 
-  bundleFunction () {
+  _bundleFunction () {
     return Promise
       .bind(this)
-      .then(() => this.bundle(this.options.function))
-      .tapCatch(this.warnFailure)
+      .then(this._validate)
+      .then(() => this._bundle(this._b.options.function))
+      .tapCatch(this._warnFailure)
   }
 
-  getAllFunctions () {
-    return this.serverless.service.getAllFunctions()
+  _getAllFunctions () {
+    return this.S.service.getAllFunctions()
   }
 
-  handleSkip (err) {
-    if (err.statusCode !== 'skip') {
+  _handleSkip (err) {
+    if (err instanceof errors.SkipError) {
+      this.S.cli.log(`Browserifier: ${err.message}`)
+    } else {
       throw err
     }
-    this.serverless.cli.log(`Browserifier: ${err.message}, skipping browserify`)
   }
 
-  warnFailure () {
-    this.serverless.cli.log(`Browserifier: unexpected failure detected`)
+  _warnFailure () {
+    this.S.cli.log('Browserifier: Unexpected failure detected!')
+  }
+
+  static getName () {
+    return 'com.digitalmaas.BrowserifierPlugin'
   }
 }
 
+Object.assign(BrowserifierPlugin.prototype, configure, bundle, validate)
 module.exports = BrowserifierPlugin
