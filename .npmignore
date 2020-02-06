@@ -1,4 +1,10 @@
-.editorconfig
-.npmrc
-npm-debug.log
-node_modules
+# blacklists it all
+/*
+
+# enable only the needed files
+!CHANGELOG.md
+!README.md
+!LICENSE
+!package.json
+!index.js
+!lib/**/*
