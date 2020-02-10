@@ -33,8 +33,7 @@ class BrowserifierPlugin {
   }
 
   _prepareAllFunctions () {
-    return Promise
-      .bind(this)
+    return Promise.bind(this)
       .then(this._validate)
       .then(this._computeGlobalConfig)
       .then(() => {
@@ -42,16 +41,17 @@ class BrowserifierPlugin {
         this.S.cli.log(`Browserifier: Preparing ${fns.length} function(s)...`)
         return Promise.all(fns.map(name => this._bootstrap(name).reflect()))
       })
-      .then(results => results
-        .filter(inspection => inspection.isRejected())
-        .forEach(inspection => this._handleSkip(inspection.reason())))
+      .then(results =>
+        results
+          .filter(inspection => inspection.isRejected())
+          .forEach(inspection => this._handleSkip(inspection.reason()))
+      )
       .catch(this._handleSkip)
       .tapCatch(this._warnFailure)
   }
 
   _prepareFunction () {
-    return Promise
-      .bind(this)
+    return Promise.bind(this)
       .then(this._validate)
       .then(this._computeGlobalConfig)
       .then(() => this._bootstrap(this._b.options.function))
@@ -60,16 +60,14 @@ class BrowserifierPlugin {
   }
 
   _bundleAllFunctions () {
-    return Promise
-      .bind(this)
+    return Promise.bind(this)
       .then(this._validate)
       .then(() => Promise.all(this._getAllFunctions().map(name => this._bundle(name))))
       .tapCatch(this._warnFailure)
   }
 
   _bundleFunction () {
-    return Promise
-      .bind(this)
+    return Promise.bind(this)
       .then(this._validate)
       .then(() => this._bundle(this._b.options.function))
       .tapCatch(this._warnFailure)
