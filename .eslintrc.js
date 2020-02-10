@@ -1,24 +1,37 @@
+'use strict'
+
+const prettierrc = require('./.prettierrc.json')
+const engines = require('./package.json').engines
+
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'script'
+    ecmaVersion: 2018,
+    sourceType: 'module'
   },
   env: {
-    node: true,
-    es6: true,
-    jest: true
+    node: true
   },
   plugins: [
-    'standard',
-    'prettier'
+    'node',
+    'prettierx'
   ],
   extends: [
+    'eslint:recommended',
+    'plugin:node/recommended',
     'standard',
-    'prettier',
-    'prettier/standard'
+    'plugin:prettierx/standardx'
   ],
+  settings: {
+    prettierx: {
+      usePrettierrc: true,
+      editorconfig: true
+    }
+  },
   rules: {
-    'space-before-function-paren': ['error', 'always']
+    'require-atomic-updates': 0,
+    'node/no-extraneous-require': 0,
+    'node/no-unsupported-features/es-syntax': ['error', { version: engines.node }],
+    'prettierx/options': ['error', prettierrc]
   }
 }

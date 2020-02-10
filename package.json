@@ -4,71 +4,42 @@
   "description": "Serverless v1 plugin that uses browserify to bundle Node.js lambda functions",
   "main": "index.js",
   "scripts": {
-    "format": "./node_modules/.bin/eslint --fix --ext .js .",
-    "lint": "./node_modules/.bin/eslint --ext .js .",
-    "pretest": "npm run lint",
-    "test": "echo \"no tests yet =(\"",
+    "lint": "eslint . --ext .js",
+    "test:unit": "echo \"no tests yet\"",
+    "test": "npm run lint && npm run test:unit --",
     "release": "semantic-release"
   },
   "dependencies": {
-    "archiver": "^1.3.0",
+    "archiver": "^2.1.1",
     "bluebird": "^3.7.2",
-    "browserify": "^16.5.0",
-    "filesize": "^3.6.1",
-    "fs-extra": "^0.30.0",
-    "globby": "^6.1.0",
+    "filesize": "^6.0.1",
+    "fs-extra": "^8.1.0",
+    "globby": "^11.0.0",
     "lodash": "^4.17.15",
-    "semver": "^5.7.1"
+    "semver": "^7.1.2"
   },
   "peerDependencies": {
     "browserify": ">=13.3.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.2.0",
-    "@commitlint/config-conventional": "8.2.0",
-    "@semantic-release/changelog": "3.0.5",
-    "@semantic-release/git": "7.0.17",
-    "eslint": "4.19.1",
-    "eslint-config-prettier": "3.0.1",
-    "eslint-plugin-prettier": "2.6.2",
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4",
+    "@semantic-release/changelog": "5.0.0",
+    "@semantic-release/git": "9.0.0",
+    "browserify": "16.5.0",
+    "eslint": "6.8.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-prettierx": "0.11.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
     "husky": "4.2.1",
     "lint-staged": "10.0.7",
-    "prettier": "1.14.2",
-    "semantic-release": "15.13.28",
-    "standard": "11.0.1"
-  },
-  "author": "Ricardo Nolde <ricardo@nolde.com.br>",
-  "license": "MIT",
-  "homepage": "https://github.com/digitalmaas/serverless-plugin-browserifier#readme",
-  "bugs": {
-    "url": "https://github.com/digitalmaas/serverless-plugin-browserifier/issues"
-  },
-  "contributors": [
-    "Ryan Pendergast <ryan.pendergast@gmail.com> (http://rynop.com)",
-    "Ricardo Nolde <ricardo@nolde.com.br>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/digitalmaas/serverless-plugin-browserifier.git"
+    "semantic-release": "17.0.2"
   },
   "engines": {
-    "node": ">=4.3"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true,
-    "jsxBracketSameLine": true
-  },
-  "lint-staged": {
-    "*.js": "eslint --fix"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test"
-    }
+    "node": ">=6"
   },
   "keywords": [
     "digitalmaas",
@@ -84,5 +55,22 @@
     "aws-lambda",
     "node.js",
     "node"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/digitalmaas/serverless-plugin-browserifier/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitalmaas/serverless-plugin-browserifier.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "contributors": [
+    "Ryan Pendergast <ryan.pendergast@gmail.com> (http://rynop.com)",
+    "Ricardo Nolde <nolde@users.noreply.github.com>"
+  ],
+  "author": "Ricardo Nolde <ricardo@nolde.com.br>",
+  "homepage": "https://github.com/digitalmaas/serverless-plugin-browserifier#readme",
+  "license": "MIT"
 }

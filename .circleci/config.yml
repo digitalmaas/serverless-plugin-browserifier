@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm ci --verbose
       - run: npm test
 
   release:
@@ -13,7 +13,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm ci --verbose
       - run: npm run release
 
 workflows:
@@ -26,4 +26,6 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - next
