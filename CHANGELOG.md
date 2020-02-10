@@ -1,3 +1,10 @@
+## [2.2.1-rc.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.2.0...v2.2.1-rc.1) (2020-02-10)
+
+
+### Bug Fixes
+
+* update dependencies, trying to fix weird issues with sls 1.62.x ([55f04aa](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/55f04aa65cf5ca2713067cde0bd07497f87dfba2))
+
 Changelog
 
 # [2.2.0](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.1.0...v2.2.0) (2020-02-06)
