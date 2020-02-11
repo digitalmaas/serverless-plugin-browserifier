@@ -104,13 +104,14 @@ Usage
 
 When this plugin is enabled, and `package.individually` is `true`, running `serverless deploy` and `serverless deploy -f <funcName>` will automatically browserify your Node.js lambda code.
 
-If you want to see more information about the process, simply set `SLS_DEBUG=*`. Example:
+If you want to see more information about the process, simply set envvar `SLS_DEBUG=*` for full serverless debug output, or `SLS_BROWSERIFIER_DEBUG=*` for plugin only debug messages. Example:
+
 ```
 $ export SLS_DEBUG=*
 $ sls deploy function -v -f usersGet
 ```
 
-You can also verify your bundles by simply using `sls package`, which bundles everything up but does not deploy.
+You may also verify your bundles by simply using `sls package`, which bundles everything up but does not deploy.
 
 
 Using browserify plugins/transforms
