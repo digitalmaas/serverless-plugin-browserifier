@@ -1,3 +1,16 @@
+# [2.3.0-rc.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.2.1-rc.1...v2.3.0-rc.1) (2020-03-23)
+
+
+### Bug Fixes
+
+* fix packaging issue involving `graceful-fs` ([2099e52](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/2099e52412942faf8282cd55e1c0d36bcc0f06ad))
+* improve bundling code, use output stream `open` event ([b19ec43](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/b19ec43651425e68219678e4a598cc5d2b1b1da9))
+
+
+### Features
+
+* add SLS_BROWSERIFIER_DEBUG flag ([1dac77e](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/1dac77e52dbd7defd6b9bce20e79791ef5eb1f58))
+
 ## [2.2.1-rc.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.2.0...v2.2.1-rc.1) (2020-02-10)
 
 
