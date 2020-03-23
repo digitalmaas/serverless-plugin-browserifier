@@ -15,6 +15,7 @@ class BrowserifierPlugin {
     this.S = serverless
     this._b = {
       options,
+      debugOn: Boolean(process.env.SLS_DEBUG) || Boolean(process.env.SLS_BROWSERIFIER_DEBUG),
       isDisabled: get(this.S, 'service.custom.browserify.disable', false),
       servicePath: path.join(this.S.config.servicePath || os.tmpdir(), '.serverless'),
       runtimeIsNode: get(this.S, 'service.provider.runtime', '').indexOf('nodejs') !== -1,
@@ -39,13 +40,13 @@ class BrowserifierPlugin {
       .then(() => {
         const fns = this._getAllFunctions()
         this.S.cli.log(`Browserifier: Preparing ${fns.length} function(s)...`)
-        return Promise.all(fns.map(name => this._bootstrap(name).reflect()))
+        return Promise.map(fns, name => this._bootstrap(name).reflect())
       })
-      .then(results =>
-        results
+      .then(results => {
+        return results
           .filter(inspection => inspection.isRejected())
           .forEach(inspection => this._handleSkip(inspection.reason()))
-      )
+      })
       .catch(this._handleSkip)
       .tapCatch(this._warnFailure)
   }

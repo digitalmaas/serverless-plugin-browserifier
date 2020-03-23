@@ -9,6 +9,15 @@ Serverless Browserifier Plugin
 
 > A [Serverless](https://serverless.com) v1 plugin that uses [`browserify`][browserify-url] to bundle your Node.js Lambda functions.
 
+1. [Motivation](#motivation)
+1. [Installation](#installation)
+1. [Basic Setup](#basic-setup)
+1. [Advanced Configuration](#advanced-configuration)
+1. [FAQ](#faq)
+1. [Useful Information](#useful-information)
+1. [License](#license)
+
+
 Motivation
 ----------
 
@@ -41,6 +50,9 @@ From your target serverless project, run:
 npm install serverless-plugin-browserifier --save-dev
 ```
 
+Basic Setup
+-----------
+
 Add the plugin to your `serverless.yml`:
 
 ```yaml
@@ -52,11 +64,13 @@ package:
 
 The `package.individually` setting must be set -- either on global or function level -- to allow minimal bundle size based on each lambda's entrypoint.
 
+You're all set! Use your normal serverless commands to package and deploy.
 
-Configuration
--------------
 
-For most use cases you should **NOT** need to do any configuration. You can, however, introduce custom configuration.
+Advanced Configuration
+----------------------
+
+For most use cases you should **NOT** need to do any extra configuration. That said, the ability is present if you need it.
 
 The base config for browserify is read from the `custom.browserify` section of `serverless.yml`.  All [browserify options][browserify-options] are supported (most are auto configured by this plugin).  This plugin adds one special option `disable` which if `true` will bypass this plugin.
 
@@ -99,22 +113,21 @@ functions:
 ```
 
 
-Usage
------
+### Debugging
 
 When this plugin is enabled, and `package.individually` is `true`, running `serverless deploy` and `serverless deploy -f <funcName>` will automatically browserify your Node.js lambda code.
 
-If you want to see more information about the process, simply set `SLS_DEBUG=*`. Example:
+If you want to see more information about the process, simply set envvar `SLS_DEBUG=*` for full serverless debug output, or `SLS_BROWSERIFIER_DEBUG=*` for plugin only debug messages. Example:
+
 ```
 $ export SLS_DEBUG=*
 $ sls deploy function -v -f usersGet
 ```
 
-You can also verify your bundles by simply using `sls package`, which bundles everything up but does not deploy.
+You may also verify your bundles by simply using `sls package`, which bundles everything up but does not deploy.
 
 
-Using browserify plugins/transforms
------------------------------------
+### Using browserify plugins/transforms
 
 If you want to use browserify plugins, you can easily do that by using the global browserify options. As the plugin merely passes that up to browserify, as if it is calling the main [`browserify`][browserify-options] function, you can use it to add any transformations you want.
 
@@ -146,10 +159,9 @@ custom:
 For an in-depth example, please check [this issue](https://github.com/digitalmaas/serverless-plugin-browserifier/issues/8).
 
 
-Best practices
---------------
+### Best practices
 
-__If using it with AWS, use discrete SDK clients!__
+#### If using it with AWS, use discrete SDK clients!
 
 The official [aws-sdk-js][aws-sdk] officially [supports browserify][aws-sdk-support]. That allows us to further reduce the size of our bundles (and Lambda memory usage and speed) by loading only what is strictly needed.
 
@@ -162,7 +174,7 @@ const S3 = require('aws-sdk/clients/s3')
 const s3 = new S3()
 ```
 
-__Ignore AWS SDK!__
+#### Ignore AWS SDK!
 
 Although you can use discrete clients (see item above), AWS Lambda service always bundles up the latest SDK version in its Lambda container image. That means that, even if you don't add AWS SDK to your bundle, it will still be available in runtime.
 
@@ -176,6 +188,36 @@ custom:
       - aws-sdk/clients/s3
 ```
 
+To help you out, here's a script you can use to hide `aws-sdk` and all its clients from browserify. You can use it in your custom config for the plugin in _serverless.yml_:
+
+```yml
+# serverless.yml
+
+custom:
+  browserify: browserify: ${file(./custom.browserify.js)}
+```
+
+```js
+// custom.browserify.js
+//
+const fs = require('fs')
+const path = require('path')
+
+module.exports = function browserifyOptions () {
+  return {
+    // any other valid browserify configuration...
+    noParse: ['/**/*.json'],
+    exclude: ['aws-sdk', ...getAllAwsSdkClients()]
+  }
+}
+
+function getAllAwsSdkClients () {
+  return fs
+    .readdirSync('./node_modules/aws-sdk/clients', { withFileTypes: true })
+    .filter(file => file.isFile() && path.extname(file.name) === '.js')
+    .map(file => `aws-sdk/clients/${path.basename(file.name, '.js')}`)
+}
+```
 
 FAQ
 ---
@@ -193,7 +235,7 @@ __Avoid mixing this plugin with other plugins that modify serverless' packaging 
 This plugin _hijacks_ the normal serverless packaging process, so it will probably conflict with other plugins that use similar mechanisms.
 
 
-Useful information
+Useful Information
 ------------------
 
 - [List of browserify's transforms][useful-transforms-list]
