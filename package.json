@@ -10,31 +10,31 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "archiver": "^5.0.0",
+    "archiver": "^3.1.1",
     "bluebird": "^3.7.2",
-    "filesize": "^6.0.1",
+    "filesize": "^3.6.1",
     "fs-extra": "^8.1.0",
-    "globby": "^11.0.0",
-    "graceful-fs": "^4.2.3",
-    "lodash": "^4.17.15",
-    "semver": "^7.1.2"
+    "globby": "^9.2.0",
+    "graceful-fs": "^4.2.4",
+    "lodash": "^4.17.19",
+    "semver": "^6.3.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
-    "@semantic-release/changelog": "5.0.0",
+    "@commitlint/cli": "9.1.2",
+    "@commitlint/config-conventional": "9.1.1",
+    "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
-    "browserify": "16.5.0",
+    "browserify": "^16.5.2",
     "eslint": "6.8.0",
     "eslint-config-standard": "14.1.1",
-    "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-node": "11.0.0",
-    "eslint-plugin-prettierx": "0.11.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettierx": "0.12.1",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
-    "husky": "4.2.3",
-    "lint-staged": "10.0.8",
-    "semantic-release": "17.0.4"
+    "husky": "4.2.5",
+    "lint-staged": "10.2.11",
+    "semantic-release": "17.1.1"
   },
   "peerDependencies": {
     "browserify": ">=13.3.0"
