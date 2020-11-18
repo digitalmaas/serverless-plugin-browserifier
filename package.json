@@ -34,7 +34,7 @@
     "eslint-plugin-standard": "4.0.1",
     "husky": "4.2.5",
     "lint-staged": "10.2.11",
-    "semantic-release": "17.1.1"
+    "semantic-release": "17.2.3"
   },
   "peerDependencies": {
     "browserify": ">=13.3.0"
