@@ -26,7 +26,6 @@ class BrowserifierPlugin {
     this.hooks = {
       // handle `sls deploy`
       'before:package:createDeploymentArtifacts': this._prepareAllFunctions.bind(this),
-      'after:package:createDeploymentArtifacts': this._bundleAllFunctions.bind(this),
       // handle `sls deploy function`
       'before:package:function:package': this._prepareFunction.bind(this),
       'after:package:function:package': this._bundleFunction.bind(this)
@@ -47,6 +46,7 @@ class BrowserifierPlugin {
           .filter(inspection => inspection.isRejected())
           .forEach(inspection => this._handleSkip(inspection.reason()))
       })
+      .then(() => Promise.all(this._getAllFunctions().map(name => this._bundle(name))))
       .catch(this._handleSkip)
       .tapCatch(this._warnFailure)
   }
@@ -56,21 +56,8 @@ class BrowserifierPlugin {
       .then(this._validate)
       .then(this._computeGlobalConfig)
       .then(() => this._bootstrap(this._b.options.function))
-      .catch(this._handleSkip)
-      .tapCatch(this._warnFailure)
-  }
-
-  _bundleAllFunctions () {
-    return Promise.bind(this)
-      .then(this._validate)
-      .then(() => Promise.all(this._getAllFunctions().map(name => this._bundle(name))))
-      .tapCatch(this._warnFailure)
-  }
-
-  _bundleFunction () {
-    return Promise.bind(this)
-      .then(this._validate)
       .then(() => this._bundle(this._b.options.function))
+      .catch(this._handleSkip)
       .tapCatch(this._warnFailure)
   }
 
