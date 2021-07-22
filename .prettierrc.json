@@ -2,7 +2,14 @@
   "printWidth": 100,
   "semi": false,
   "singleQuote": true,
+  "quoteProps": "consistent",
   "jsxBracketSameLine": true,
+  "jsxSingleQuote": true,
   "endOfLine": "lf",
-  "spaceBeforeFunctionParen": true
+  "spaceBeforeFunctionParen": true,
+  "trailingComma": "none",
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "generatorStarSpacing": true,
+  "yieldStarSpacing": true
 }

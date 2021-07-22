@@ -6,21 +6,18 @@ const engines = require('./package.json').engines
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2019,
     sourceType: 'module'
   },
   env: {
     node: true
   },
-  plugins: [
-    'node',
-    'prettierx'
-  ],
+  plugins: ['prettierx'],
   extends: [
+    // order matters
     'eslint:recommended',
-    'plugin:node/recommended',
-    'standard',
-    'plugin:prettierx/standardx'
+    'standardize',
+    'plugin:prettierx/standardize'
   ],
   settings: {
     prettierx: {
