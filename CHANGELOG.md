@@ -1,3 +1,20 @@
+## [3.0.0-rc.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.3.1...v3.0.0-rc.1) (2021-07-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* changes `invoke local` behaviour
+* bundling flow modified, may affect older versions
+
+### Features
+
+* bundle function when using `serverless invoke local` ([1034a63](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/1034a630f9946cf435c68f93ec110e062ea19951))
+
+
+### Bug Fixes
+
+* adapt to serverless artifact validation introduced in v2.51.1 ([7ebe3d8](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/7ebe3d867d5d641b61d79dd901d0ca54baf2e7a5))
+
 ## [2.3.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.3.0...v2.3.1) (2020-08-04)
 
 
