@@ -7,8 +7,9 @@ Serverless Browserifier Plugin
 [![NPM downloads][downloads-badge]][npm-url]
 [![standardjs][standardjs-badge]][standardjs-url]
 
-> A [Serverless](https://serverless.com) v1 plugin that uses [`browserify`][browserify-url] to bundle your Node.js Lambda functions.
+> A [Serverless](https://serverless.com) v1 and v2 plugin that uses [`browserify`][browserify-url] to bundle your Node.js Lambda functions.
 
+1. [Supported Commands](#supported-commands)
 1. [Motivation](#motivation)
 1. [Installation](#installation)
 1. [Basic Setup](#basic-setup)
@@ -16,6 +17,16 @@ Serverless Browserifier Plugin
 1. [FAQ](#faq)
 1. [Useful Information](#useful-information)
 1. [License](#license)
+
+
+Supported Commands
+------------------
+
+- `serverless package`
+- `serverless deploy`
+- `serverless deploy function`
+- `serverless invoke local`
+    + the plugin will automatically build and use your bundle to execute the function locally; to avoid it, you can use the `--no-build` option, which will then use your handler file directly
 
 
 Motivation
@@ -80,14 +91,17 @@ The base config can be overridden on a function-by-function basis.  Again, `cust
 custom:
   browserify:
     # any option defined in https://github.com/substack/node-browserify#browserifyfiles--opts
+    extensions:
+      - .js # default
 
 functions:
   usersGet:
     description: Get users
     handler: users/index.handler
     browserify:
+      # any option defined in https://github.com/substack/node-browserify#browserifyfiles--opts
       noParse:
-        - ./someBig.json  #browserify can't optimize json, will take long time to parse for nothing
+        - ./someBig.json  # browserify can't optimize json, will take long time to parse for nothing
 ```
 
 If you find a package that is not supported or does not behave well with browserify, you can still use function level `package.include` to include extra modules and files to your package. That said, you are encouraged to verify if you specific case can be dealt with by leveraging all available [browserify options][browserify-options] in your `serverless.yml` custom `browserify` section.
@@ -120,7 +134,7 @@ When this plugin is enabled, and `package.individually` is `true`, running `serv
 If you want to see more information about the process, simply set envvar `SLS_DEBUG=*` for full serverless debug output, or `SLS_BROWSERIFIER_DEBUG=*` for plugin only debug messages. Example:
 
 ```
-$ export SLS_DEBUG=*
+$ export SLS_BROWSERIFIER_DEBUG=*
 $ sls deploy function -v -f usersGet
 ```
 
@@ -174,7 +188,7 @@ const S3 = require('aws-sdk/clients/s3')
 const s3 = new S3()
 ```
 
-#### Ignore AWS SDK!
+#### Ignore AWS SDK v2!
 
 Although you can use discrete clients (see item above), AWS Lambda service always bundles up the latest SDK version in its Lambda container image. That means that, even if you don't add AWS SDK to your bundle, it will still be available in runtime.
 
@@ -194,7 +208,7 @@ To help you out, here's a script you can use to hide `aws-sdk` and all its clien
 # serverless.yml
 
 custom:
-  browserify: browserify: ${file(./custom.browserify.js)}
+  browserify: ${file(./custom.browserify.js)}
 ```
 
 ```js
@@ -230,9 +244,9 @@ __What about uglification? And babel?__
 
 You should be able to use [`uglify-es`][uglify-url] through [`uglifyify`][uglifyify-url]. For babel usage, [`babelify`][babelify-url] should do the trick. Refer back to [_Using browserify plugins_](#using-browserify-pluginstransforms) section to set it up.
 
-__Avoid mixing this plugin with other plugins that modify serverless' packaging behaviour!__
+__This other plugin I use is not playing ball with `serverless-plugin-browserifier`! What's up?__
 
-This plugin _hijacks_ the normal serverless packaging process, so it will probably conflict with other plugins that use similar mechanisms.
+This plugin _hijacks_ the normal serverless packaging process, so it will probably conflict with other plugins that use similar mechanisms. Please avoid mixing this plugin with other plugins that modify serverless' packaging behaviour.
 
 
 Useful Information
