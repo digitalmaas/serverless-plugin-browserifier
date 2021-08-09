@@ -1,3 +1,16 @@
+## [3.1.0](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v3.0.0...v3.1.0) (2021-08-09)
+
+
+### Features
+
+* add schema extension for function property ([70a54ca](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/70a54ca7685b3e98d65b322f70b4853256d7c49c))
+
+
+### Bug Fixes
+
+* fix skipping function functionality ([9cfa93e](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/9cfa93ee254e230601f5fa1922ea4b8b26ae1cf7))
+* force graceful-js to 4.2.6 to stop some zipping issues ([3beffea](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/3beffea1a6725d5792803a1e444212f5a629bb12))
+
 ## [3.0.0](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v2.3.1...v3.0.0) (2021-07-27)
 
 
