@@ -10,9 +10,7 @@ const preset = 'conventionalcommits'
 module.exports = {
   branches: [
     {
-      name: 'master',
-      prerelease: false,
-      channel: 'stable'
+      name: 'master'
     },
     {
       name: 'next',
