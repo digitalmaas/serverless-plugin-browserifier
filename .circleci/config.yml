@@ -2,7 +2,7 @@ version: 2
 jobs:
   run_tests:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - run: npm ci --verbose
@@ -10,7 +10,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - run: npm ci --verbose
