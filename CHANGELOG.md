@@ -1,3 +1,11 @@
+### [3.1.1-rc.1](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v3.1.0...v3.1.1-rc.1) (2022-03-29)
+
+
+### Bug Fixes
+
+* update dependencies to address high severity vulnerabilities ([5ba17e4](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/5ba17e48460908227c9de156afc5fc1b170d36af))
+* update dependencies to remove security warnings ([0089e68](https://github.com/digitalmaas/serverless-plugin-browserifier/commit/0089e6843286eadac4dad3e26aeedd8aeb996f04))
+
 ## [3.1.0](https://github.com/digitalmaas/serverless-plugin-browserifier/compare/v3.0.0...v3.1.0) (2021-08-09)
 
 

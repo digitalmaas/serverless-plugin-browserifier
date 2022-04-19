@@ -7,7 +7,7 @@ Serverless Browserifier Plugin
 [![NPM downloads][downloads-badge]][npm-url]
 [![standardjs][standardjs-badge]][standardjs-url]
 
-> A [Serverless](https://serverless.com) v1 and v2 plugin that uses [`browserify`][browserify-url] to bundle your Node.js Lambda functions.
+> A [Serverless](https://serverless.com) plugin that uses [`browserify`][browserify-url] to bundle your Node.js Lambda functions. Works with serverless versions 1 to 3.
 
 1. [Supported Commands](#supported-commands)
 1. [Motivation](#motivation)
@@ -190,9 +190,9 @@ const s3 = new S3()
 
 #### Ignore AWS SDK v2!
 
-Although you can use discrete clients (see item above), AWS Lambda service always bundles up the latest SDK version in its Lambda container image. That means that, even if you don't add AWS SDK to your bundle, it will still be available in runtime.
+Although you can use discrete clients (see item above), AWS Lambda service always bundles up the latest v2 SDK version in its Lambda container image. That means that, even if you don't add AWS SDK to your bundle, it will still be available in for your code in runtime.
 
-Therefore, if you don't need any specific AWS SDK version, you can add the following to your plugin config:
+Therefore, if you don't need any specific AWS SDK v2 version, you can add the following to your plugin config:
 
 ```yml
 custom:
@@ -218,8 +218,9 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = function browserifyOptions () {
+  // may contain any option defined in
+  // https://github.com/substack/node-browserify#browserifyfiles--opts
   return {
-    // any other valid browserify configuration...
     noParse: ['/**/*.json'],
     exclude: ['aws-sdk', ...getAllAwsSdkClients()]
   }
@@ -246,7 +247,7 @@ You should be able to use [`uglify-es`][uglify-url] through [`uglifyify`][uglify
 
 __This other plugin I use is not playing ball with `serverless-plugin-browserifier`! What's up?__
 
-This plugin _hijacks_ the normal serverless packaging process, so it will probably conflict with other plugins that use similar mechanisms. Please avoid mixing this plugin with other plugins that modify serverless' packaging behaviour.
+This plugin *hijacks* the normal serverless packaging process, so it will probably conflict with other plugins that use similar mechanisms. Please avoid mixing this plugin with other plugins that modify serverless' packaging behaviour.
 
 
 Useful Information
